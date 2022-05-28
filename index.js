@@ -3,10 +3,30 @@ window.onload = function () {
     let turn;
     let team1Pieces;
     let team2Pieces;
+    //the elements will function as board state
 
     //buttons/elements
     const startBtn = $('#start');
     const board = $('#game-container');
+    const turnText = $('#currentTurn');
+
+    //custom event listeners
+    $(document).on('changeTurn', function() {
+        console.log('turn changed');
+    })
+
+    //board event listeners
+    $('.cell').on('click', function() {
+        console.log($(this));
+    })
+
+    $('.cell').on('mouseenter', function() {
+        console.log('hover')
+    })
+
+    $('.cell').on('mouseleave', function() {
+        
+    })
 
     //button functionality
     startBtn.on('click', function () {
@@ -18,9 +38,9 @@ window.onload = function () {
     function startGame() {
         //populate the board
         populateBoard();
+        determineFirstTurn();
 
         //initialize state
-        turn = determineFirstTurn();
         team1Pieces = 16;
         team2Pieces = 16;
         
@@ -73,7 +93,15 @@ window.onload = function () {
 
     function determineFirstTurn(){
         //return either 1 or 2, which will determine who goes first
-        return Math.ceil(Math.random() * 2);
+        turn = Math.ceil(Math.random() * 2);
+        console.log(turn);
+        console.log(turnText.text());
+        if(turn === 1){
+            turnText.text('Team 1');
+        }
+        else {
+            turnText.text('Team 2');
+        }
     }
 
     function determineTurnState(pieceTaken){

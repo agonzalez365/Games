@@ -67,7 +67,7 @@ window.onload = function () {
 
             //populates every other cell from starting point in current row
             for(let i = startPoint; i < 8; i += 2){
-                currentRow.children().eq(i).append(`<div class="piece team1"></div>`);
+                currentRow.children().eq(i).append(`<piece class="team1"></piece>`);
                 
             }
         }
@@ -86,23 +86,10 @@ window.onload = function () {
             }
 
             for(let i = startPoint; i < 8; i += 2){
-                currentRow.children().eq(i).append(`<div class="piece team2"></div>`);
+                currentRow.children().eq(i).append(`<piece class="team2"></piece>`);
             }
         }
         
-    }
-
-    function determineFirstTurn(){
-        //return either 1 or 2, which will determine who goes first
-        turn = Math.ceil(Math.random() * 2);
-        console.log(turn);
-        console.log(turnText.text());
-        if(turn === 1){
-            turnText.text('Team 1');
-        }
-        else {
-            turnText.text('Team 2');
-        }
     }
 
     //resets the board
@@ -193,8 +180,17 @@ window.onload = function () {
         `)
     }
 
-    function determineTurnState(pieceTaken){
-
+    function determineFirstTurn(){
+        //return either 1 or 2, which will determine who goes first
+        turn = Math.ceil(Math.random() * 2);
+        console.log(turn);
+        console.log(turnText.text());
+        if(turn === 1){
+            turnText.text('Team 1');
+        }
+        else {
+            turnText.text('Team 2');
+        }
     }
 
 }

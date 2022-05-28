@@ -37,6 +37,7 @@ window.onload = function () {
     //function to begin a game
     function startGame() {
         //populate the board
+        resetBoard();
         populateBoard();
         determineFirstTurn();
 
@@ -102,6 +103,94 @@ window.onload = function () {
         else {
             turnText.text('Team 2');
         }
+    }
+
+    //resets the board
+    function resetBoard() {
+        //instead of checking for pieces and removing them, this just empties the entire board of elements and appends back the default
+        board.empty();
+        board.append(`
+        <div class="row">
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+            </div>
+            <div class="row">
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+            </div>
+            <div class="row">
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+            </div>
+            <div class="row">
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+            </div>
+            <div class="row">
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+            </div>
+            <div class="row">
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+            </div>
+            <div class="row">
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+            </div>
+            <div class="row">
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+                <div class="cell c2"></div>
+                <div class="cell c1"></div>
+            </div>
+        `)
     }
 
     function determineTurnState(pieceTaken){

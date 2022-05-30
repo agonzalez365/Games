@@ -21,7 +21,7 @@ window.onload = function () {
     //custom event listeners
     $(document).on('changeTurn', function () {
         console.log('turn changed');
-        if(turn === 1){
+        if (turn === 1) {
             turn = 2;
             turnText.text('Team 2');
             turnText.css('color', 'rgb(34, 34, 116)');
@@ -38,41 +38,35 @@ window.onload = function () {
     //this is ugly but it seemed like the simplest solution
     //this event is how the player interacts with the board, when you click on a cell,
     //it will evaluate what moves (if any) can be done
-    $('.cell').on('click', function () {
-        //check if piece is present
-        //console.log($(this).attr('id'));
-        //console.log($(this).attr('id').slice(1));
-        //console.log(board);
-        //removePossibleMoves();
-        if ($(this).children().length > 0) {
-            //check what team the piece is on and assign team for later comparison
-            let piece = $(this).children().eq(0);
-            let team;
-            if (piece.hasClass('team1')) {
-                team = 1;
+    $('.cell').on('click', 'piece', function () {
+        removePossibleMoves();
+        //check what team the piece is on and assign team for later comparison
+        let piece = $(this);
+        let team;
+        if (piece.hasClass('team1')) {
+            team = 1;
+        }
+        else {
+            team = 2
+        }
+
+        //if it is that pieces turn, proceed
+        if (turn === team) {
+            //determine the x and y coordinates from ids
+            let x = Number($(this).parent().attr('id').slice(1));
+            let y = Number($(this).parent().attr('id').slice(0, 1));
+
+            //uncomment to check x
+            //console.log('x:', x);
+            //console.log('y:', y);
+
+
+            //check availables moves
+            if (team === 1) {
+                team1Moves(x, y, piece);
             }
             else {
-                team = 2
-            }
-
-            //if it is that pieces turn, proceed
-            if (turn === team) {
-                //determine the x and y coordinates from ids
-                let x = Number($(this).attr('id').slice(1));
-                let y = Number($(this).parent().attr('id'));
-
-                //uncomment to check x
-                //console.log('x:', x);
-                //console.log('y:', y);
-
-
-                //check availables moves
-                if (team === 1) {
-                    team1Moves(x, y, piece);
-                }
-                else {
-                    team2Moves(x, y, piece);
-                }
+                team2Moves(x, y, piece);
             }
         }
     })
@@ -82,12 +76,12 @@ window.onload = function () {
         let origPosY = $(this).text().slice(3, 4);
         let pieceTeam = $(this).text().slice(5, 6);
         let pieceKing = $(this).text().slice(7);
-        if($(this).hasClass('nohop')){
+        if ($(this).hasClass('nohop')) {
             //replace piece
-            if(pieceKing == 1){
+            if (pieceKing == 1) {
                 $(this).parent().empty().append(`<piece class="team${pieceTeam} king"></piece>`);
             }
-            else{
+            else {
                 $(this).parent().empty().append(`<piece class="team${pieceTeam}"></piece>`);
             }
 
@@ -103,20 +97,20 @@ window.onload = function () {
         else {
             //replace move with piece
             let cell = ($(this).parent());
-            if(pieceKing == 1){
+            if (pieceKing == 1) {
                 cell.empty().append(`<piece class="team${pieceTeam} king"></piece>`);
             }
-            else{
+            else {
                 cell.empty().append(`<piece class="team${pieceTeam}"></piece>`);
             }
-            
+
             //remove old pieces
             board.children().eq(origPosY).children().eq(origPosX).empty();
             let cellX = Number(cell.attr('id').slice(1));
             let cellY = Number(cell.attr('id').slice(0, 1));
             //and i thought i was being clever not tracking the board
-            if(cellY > origPosY){
-                if(cellX > origPosX){
+            if (cellY > origPosY) {
+                if (cellX > origPosX) {
                     board.children().eq(cellY - 1).children().eq(cellX - 1).empty();
                 }
                 else {
@@ -124,7 +118,7 @@ window.onload = function () {
                 }
             }
             else {
-                if(cellX > origPosX){
+                if (cellX > origPosX) {
                     board.children().eq(cellY + 1).children().eq(cellX - 1).empty();
                 }
                 else {
@@ -133,20 +127,20 @@ window.onload = function () {
             }
 
             //update the state
-            if(pieceTeam == 1){
+            if (pieceTeam == 1) {
                 team1Pieces -= 1;
-                if(team1Pieces === 0){
+                if (team1Pieces === 0) {
                     //to do: game over
                 }
             }
             else {
                 team2Pieces -= 2;
-                if(team2Pieces === 0){
+                if (team2Pieces === 0) {
                     //to do: game over
                 }
             }
-            
-            
+
+
             //remove other moves
             removePossibleMoves();
         }
@@ -168,7 +162,7 @@ window.onload = function () {
     //function to begin a game
     function startGame() {
         //populate the board
-        //resetBoard();
+        resetBoard();
         populateBoard();
         determineFirstTurn();
 
@@ -225,10 +219,10 @@ window.onload = function () {
 
     //resets the board
     function resetBoard() {
-        for(let i = 0; i < 8; i++){
-            board.children().eq(i).each(function(){
-                $(this).children().each(function(index){
-                    if($(this).children().length > 0){
+        for (let i = 0; i < 8; i++) {
+            board.children().eq(i).each(function () {
+                $(this).children().each(function (index) {
+                    if ($(this).children().length > 0) {
                         $(this).empty();
                     }
                 })
@@ -236,12 +230,12 @@ window.onload = function () {
         }
     }
 
-    function removePossibleMoves(){
+    function removePossibleMoves() {
         //iterates through each row's children checking if it contains moves, and removing them
-        for(let i = 0; i < 8; i++){
-            board.children().eq(i).each(function(){
-                $(this).children().each(function(index){
-                    if($(this).children().eq(0).hasClass('move')){
+        for (let i = 0; i < 8; i++) {
+            board.children().eq(i).each(function () {
+                $(this).children().each(function (index) {
+                    if ($(this).children().eq(0).hasClass('move')) {
                         $(this).empty();
                     }
                 })
@@ -284,79 +278,87 @@ window.onload = function () {
         //front left
         //if piece is present in leftward cell
         let leftCell = frontRow.children().eq(x - 1);
-        if(leftCell.children().length > 0){
+        if (leftCell.children().length > 0 ) {
             //if it is a piece of another team and not on the edge
             let leftCellXVal = Number(leftCell.attr('id').slice(1));
-            if(leftCell.children().eq(0).hasClass('team2') && leftCellXVal !== 0 && leftCellXVal !== 7){
+            if (leftCell.children().eq(0).hasClass('team2') && leftCellXVal !== 0 && leftCellXVal !== 7) {
                 //left cell is now on the other side of piece
                 leftCell = board.children().eq(y + 2).children().eq(x - 2);
                 //if new leftcell is not occupied, a move is available append
-                if(leftCell.children().length === 0){
+                if (leftCell.children().length === 0) {
                     leftCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
                 }
             }
         }
         //else it is open and you can move normally
         else {
-            leftCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+            if(x - 1 >= 0){
+                leftCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+            }
         }
 
         //front right - same deal, x and y modified
         let rightCell = frontRow.children().eq(x + 1);
-        if(rightCell.children().length > 0){
+        if (rightCell.children().length > 0) {
             let rightCellXVal = Number(rightCell.attr('id').slice(1));
-            if(rightCell.children().eq(0).hasClass('team2') && rightCellXVal !== 0 && rightCellXVal !== 7){
+            if (rightCell.children().eq(0).hasClass('team2') && rightCellXVal !== 0 && rightCellXVal !== 7) {
                 rightCell = board.children().eq(y + 2).children().eq(x + 2);
-                if(rightCell.children().length === 0){
+                if (rightCell.children().length === 0) {
                     rightCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
                 }
             }
         }
         else {
-            rightCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+            if(x + 1 <= 7) {
+                rightCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+            }
         }
 
         //backward movement
         //check if king
-        if(king === 1){
+        if (king === 1) {
             let backRow = board.children().eq(y - 1);
 
             //back left
             let backLeftCell = backRow.children().eq(x - 1);
 
-            if(backLeftCell.children().length > 0){
+            if (backLeftCell.children().length > 0) {
                 let backLeftCellXVal = Number(backLeftCell.attr('id').slice(1));
 
-                if(backLeftCell.children().eq(0).hasClass('team2') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7){
+                if (backLeftCell.children().eq(0).hasClass('team2') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7) {
                     backLeftCell = board.children().eq(y - 2).children().eq(x - 2);
                     console.log(backLeftCell);
 
-                    if(backLeftCell.children().length === 0){
+                    if (backLeftCell.children().length === 0) {
                         backLeftCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
                     }
                 }
             }
             else {
-                backLeftCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+                if(x - 1 >= 0){
+                    backLeftCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+                }
             }
 
             //back right
             let backRightCell = backRow.children().eq(x + 1);
-            if(backRightCell.children().length > 0){
+            if (backRightCell.children().length > 0) {
                 let backRightCellXVal = Number(backRightCell.attr('id').slice(1));
 
-                if(backRightCell.children().eq(0).hasClass('team2') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
+                if (backRightCell.children().eq(0).hasClass('team2') && backRightCellXVal !== 0 && backRightCellXVal !== 7) {
                     backRightCell = board.children().eq(y - 2).children().eq(x + 2);
                     console.log('t1r')
                     console.log(backRightCell);
 
-                    if(backRightCell.children().length === 0){
+                    if (backRightCell.children().length === 0) {
                         backRightCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
                     }
                 }
             }
             else {
-                backRightCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+                if(x + 1 <= 7){
+                    backRightCell.append(`<div class="move nohop">x${x}y${y}t1k${king}</div>`);
+                }
             }
         }
     }
@@ -370,78 +372,86 @@ window.onload = function () {
         //front left
         //if piece is present in leftward cell
         let leftCell = frontRow.children().eq(x - 1);
-        if(leftCell.children().length > 0){
+        if (leftCell.children().length > 0) {
             //if it is a piece of another team and not on the edge
             let leftCellXVal = Number(leftCell.attr('id').slice(1));
-            if(leftCell.children().eq(0).hasClass('team1') && leftCellXVal !== 0 && leftCellXVal !== 7){
+            if (leftCell.children().eq(0).hasClass('team1') && leftCellXVal !== 0 && leftCellXVal !== 7) {
                 //left cell is now on the other side of piece
                 leftCell = board.children().eq(y - 2).children().eq(x - 2);
                 //if new leftcell is not occupied, a move is available append
-                if(leftCell.children().length === 0){
+                if (leftCell.children().length === 0) {
                     leftCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
                 }
             }
         }
         //else it is open and you can move normally
         else {
-            leftCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+            if(x - 1 >= 0) {
+                leftCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+            }
         }
 
         //front right - same deal, x and y modified
         let rightCell = frontRow.children().eq(x + 1);
-        if(rightCell.children().length > 0){
+        if (rightCell.children().length > 0) {
             let rightCellXVal = Number(rightCell.attr('id').slice(1));
-            if(rightCell.children().eq(0).hasClass('team1') && rightCellXVal !== 0 && rightCellXVal !== 7){
+            if (rightCell.children().eq(0).hasClass('team1') && rightCellXVal !== 0 && rightCellXVal !== 7) {
                 rightCell = board.children().eq(y - 2).children().eq(x + 2);
-                if(rightCell.children().length === 0){
+                if (rightCell.children().length === 0) {
                     rightCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
                 }
             }
         }
         else {
-            rightCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+            if(x + 1 <= 7) {
+                rightCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+            }
         }
 
         //backward movement
         //check if king
-        if(king === 1){
+        if (king === 1) {
             let backRow = board.children().eq(y + 1);
 
             //back left
             let backLeftCell = backRow.children().eq(x - 1);
 
-            if(backLeftCell.children().length > 0){
+            if (backLeftCell.children().length > 0) {
                 let backLeftCellXVal = Number(backLeftCell.attr('id').slice(1));
 
-                if(backLeftCell.children().eq(0).hasClass('team1') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7){
+                if (backLeftCell.children().eq(0).hasClass('team1') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7) {
                     backLeftCell = board.children().eq(y + 2).children().eq(x - 2);
 
-                    if(backLeftCell.children().length === 0){
+                    if (backLeftCell.children().length === 0) {
                         backLeftCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
                     }
                 }
             }
             else {
-                backLeftCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+                if(x - 1 >= 0) {
+                    backLeftCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+                }
             }
 
             //back right
             let backRightCell = backRow.children().eq(x + 1);
-            if(backRightCell.children().length > 0){
+            if (backRightCell.children().length > 0) {
                 let backRightCellXVal = Number(backRightCell.attr('id').slice(1));
 
-                if(backRightCell.children().eq(0).hasClass('team1') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
+                if (backRightCell.children().eq(0).hasClass('team1') && backRightCellXVal !== 0 && backRightCellXVal !== 7) {
                     backRightCell = board.children().eq(y + 2).children().eq(x + 2);
                     console.log('t')
                     console.log(backRightCell);
 
-                    if(backRightCell.children().length === 0){
+                    if (backRightCell.children().length === 0) {
                         backRightCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
                     }
                 }
             }
             else {
-                backRightCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+                if(x + 1 <= 7) {
+                    backRightCell.append(`<div class="move nohop">x${x}y${y}t2k${king}</div>`);
+                }
             }
         }
     }

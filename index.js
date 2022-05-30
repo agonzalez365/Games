@@ -256,42 +256,6 @@ window.onload = function () {
         }
     }
 
-    function checkAvailableMoves(x, y, team) {
-        //since y axis is inverted, team 1 (top) navigate to y + 1
-        //team 2 (bottom) will navigate to y - 1
-        //kings wont be restricted
-        //team 1 pieces can turn into kings at a y of 7
-        //team 2 pieces can turn into kings at a y of 0
-
-
-        // if(team === 1){
-        //     let row = board.children().eq(y + 1);
-        //     //let cellLeft = row.children().eq(x - 1);
-        //     //let cellRight = row.children().eq(x + 1);
-        //     for(let ix = -1; ix < 0; ix += 2){
-        //         let targetCell = row.children().eq(x + ix);
-        //         if(targetCell.children().length > 0){
-        //             if(targetCell.children().eq(0).hasClass('team2')){
-        //                 if(target){
-
-        //                 }
-        //             }
-        //         }
-        //         else {
-        //             targetCell.append(`<div class="move"></div>`);
-        //         }
-        //     }
-        // }
-        // else {
-        //     let row = board.children().eq(y - 1);
-        //     console.log('test');
-        //     console.log(row.children().eq(x - 1).has('piece'));
-        //     if(row.children().eq(x - 1).length === 1) {
-        //         row.children().eq(x - 1).append(`<div class="move"></div>`)
-        //     }
-        // }
-    }
-
     //since y axis is inverted, team 1 (top) navigate to y + 1
     //team 2 (bottom) will navigate to y - 1
     //kings wont be restricted

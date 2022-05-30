@@ -17,6 +17,8 @@ window.onload = function () {
     const startBtn = $('#start');
     const board = $('#game-container');
     const turnText = $('#currentTurn');
+    const team1PieceCounter = $('#t1-count');
+    const team2PieceCounter = $('#t2-count');
 
     //custom event listeners
     $(document).on('changeTurn', function () {
@@ -109,9 +111,7 @@ window.onload = function () {
             let cell = ($(this).parent());
 
             //make king if at edge of board
-            console.log(pieceTeam);
             if (pieceTeam == 1) {
-                console.log($(this).parent().attr('id').slice(0, 1));
                 if ($(this).parent().attr('id').slice(0, 1) == 7) {
                     pieceKing = 1;
                 }
@@ -155,17 +155,17 @@ window.onload = function () {
             //update the state
             if (pieceTeam == 1) {
                 team2Pieces -= 1;
+                team2PieceCounter.text(team2Pieces);
             }
             else {
                 team1Pieces -= 1;
+                team1PieceCounter.text(team1Pieces);
             }
 
-            console.log('team1', team1Pieces)
-            console.log('team2', team2Pieces)
-            if (team1Pieces <= 10) {
+            if (team1Pieces <= 0) {
                 endGame('Team 2');
             }
-            else if (team2Pieces <= 10) {
+            else if (team2Pieces <= 0) {
                 endGame('Team  1');
             }
 
@@ -189,6 +189,10 @@ window.onload = function () {
         //initialize state
         team1Pieces = 12;
         team2Pieces = 12;
+
+        //display state
+        team1PieceCounter.text(team1Pieces);
+        team2PieceCounter.text(team2Pieces);
 
     }
 
@@ -354,7 +358,6 @@ window.onload = function () {
 
                 if (backLeftCell.children().eq(0).hasClass('team2') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7) {
                     backLeftCell = board.children().eq(y - 2).children().eq(x - 2);
-                    console.log(backLeftCell);
 
                     if (backLeftCell.children().length === 0) {
                         backLeftCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
@@ -374,8 +377,6 @@ window.onload = function () {
 
                 if (backRightCell.children().eq(0).hasClass('team2') && backRightCellXVal !== 0 && backRightCellXVal !== 7) {
                     backRightCell = board.children().eq(y - 2).children().eq(x + 2);
-                    console.log('t1r')
-                    console.log(backRightCell);
 
                     if (backRightCell.children().length === 0) {
                         backRightCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
@@ -467,8 +468,6 @@ window.onload = function () {
 
                 if (backRightCell.children().eq(0).hasClass('team1') && backRightCellXVal !== 0 && backRightCellXVal !== 7) {
                     backRightCell = board.children().eq(y + 2).children().eq(x + 2);
-                    console.log('t')
-                    console.log(backRightCell);
 
                     if (backRightCell.children().length === 0) {
                         backRightCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);

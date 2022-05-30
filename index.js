@@ -30,7 +30,8 @@ window.onload = function () {
     $('.cell').on('click', function () {
         //check if piece is present
         //console.log($(this).attr('id'));
-        console.log($(this).attr('id').slice(1));
+        //console.log($(this).attr('id').slice(1));
+        //console.log(board);
         if ($(this).children().length > 0) {
             //check what team the piece is on and assign team for later comparison
             let piece = $(this).children().eq(0);
@@ -47,21 +48,25 @@ window.onload = function () {
                 //determine the x and y coordinates from ids
                 let x = Number($(this).attr('id').slice(1));
                 let y = Number($(this).parent().attr('id'));
-                
+
                 //uncomment to check x
                 //console.log('x:', x);
                 //console.log('y:', y);
 
 
-                //check if king before checking if a movement is available
-                if (piece.hasClass('king')) {
-
+                //check availables moves
+                if (team === 1) {
+                    team1Moves(x, y, piece);
                 }
                 else {
-
+                    team2Moves(x, y);
                 }
             }
         }
+    })
+
+    $('.move').on('click', function () {
+        console.log('movin')
     })
 
     $('.cell').on('mouseenter', function () {
@@ -85,8 +90,8 @@ window.onload = function () {
         determineFirstTurn();
 
         //initialize state
-        team1Pieces = 16;
-        team2Pieces = 16;
+        team1Pieces = 12;
+        team2Pieces = 12;
 
     }
 
@@ -226,13 +231,92 @@ window.onload = function () {
 
     function determineFirstTurn() {
         //return either 1 or 2, which will determine who goes first
-        turn = Math.ceil(Math.random() * 2);
+        turn = 1 //Math.ceil(Math.random() * 2);
         if (turn === 1) {
             turnText.text('Team 1');
+            turnText.css('color', 'rgb(130, 58, 58)');
         }
         else {
             turnText.text('Team 2');
+            turnText.css('color', 'rgb(34, 34, 116)');
         }
+    }
+
+    function checkAvailableMoves(x, y, team) {
+        //since y axis is inverted, team 1 (top) navigate to y + 1
+        //team 2 (bottom) will navigate to y - 1
+        //kings wont be restricted
+        //team 1 pieces can turn into kings at a y of 7
+        //team 2 pieces can turn into kings at a y of 0
+
+
+        // if(team === 1){
+        //     let row = board.children().eq(y + 1);
+        //     //let cellLeft = row.children().eq(x - 1);
+        //     //let cellRight = row.children().eq(x + 1);
+        //     for(let ix = -1; ix < 0; ix += 2){
+        //         let targetCell = row.children().eq(x + ix);
+        //         if(targetCell.children().length > 0){
+        //             if(targetCell.children().eq(0).hasClass('team2')){
+        //                 if(target){
+
+        //                 }
+        //             }
+        //         }
+        //         else {
+        //             targetCell.append(`<div class="move"></div>`);
+        //         }
+        //     }
+        // }
+        // else {
+        //     let row = board.children().eq(y - 1);
+        //     console.log('test');
+        //     console.log(row.children().eq(x - 1).has('piece'));
+        //     if(row.children().eq(x - 1).length === 1) {
+        //         row.children().eq(x - 1).append(`<div class="move"></div>`)
+        //     }
+        // }
+    }
+
+    //since y axis is inverted, team 1 (top) navigate to y + 1
+    //team 2 (bottom) will navigate to y - 1
+    //kings wont be restricted
+    //team 1 pieces can turn into kings at a y of 7
+    //team 2 pieces can turn into kings at a y of 0
+    //repeat clicks on a piece will not re-append because
+    //the conditionals are checking for child elements
+    //for readability i create a lot of variables because dear god it's already bad enough
+
+    function team1Moves(x, y, piece) {
+        //check if king
+        let king = piece.hasClass('king');
+        console.log('called');
+        //repeat clicks on a piece will not re-append because
+        //the conditionals are checking for child elements
+
+        let row = board.children().eq(y + 1);
+        //if piece is present in leftward cell
+        let leftCell = row.children().eq(x - 1);
+        if(leftCell.length > 0){
+            //if it is a piece of another team and not on the edge
+            let leftCellXVal = Number(leftCell.attr('id').slice(1));
+            if(leftCell.children().eq(0).hasClass('team2') && leftCellXVal !== 0 && leftCellXVal !== 7){
+                //left cell is now the 
+                leftCell = board.children().eq(y + 2).children().eq(x - 2);
+                //if new leftcell is not occupied, a move is available append
+                if(leftCell.children().length === 0){
+                    leftCell.append(`<div class="move"></div>`);
+                }
+            }
+        }
+        //else it is open and you can move normally
+        else {
+
+        }
+    }
+
+    function team2Moves(x, y) {
+
     }
 
 

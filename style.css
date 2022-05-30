@@ -57,3 +57,10 @@ piece {
 #start {
     margin-top: 1rem;
 }
+
+.move {
+    background-color: rgb(23, 182, 39);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}

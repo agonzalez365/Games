@@ -50,6 +50,10 @@ piece {
     background-color: rgb(34, 34, 116);
 }
 
+.king {
+    border: solid rgb(255, 252, 49);
+}
+
 .hide {
     display: none;
 }

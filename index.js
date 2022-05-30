@@ -77,6 +77,17 @@ window.onload = function () {
         let pieceTeam = $(this).text().slice(5, 6);
         let pieceKing = $(this).text().slice(7);
         if ($(this).hasClass('nohop')) {
+            //make king if at end of board
+            if(pieceTeam == 1){
+                if($(this).parent().attr('id').slice(0, 1) == 7){
+                    pieceKing = 1;
+                }
+            }
+            else {
+                if($(this).parent().attr('id').slice(0, 1) == 0){
+                    pieceKing = 1;
+                }
+            }
             //replace piece
             if (pieceKing == 1) {
                 $(this).parent().empty().append(`<piece class="team${pieceTeam} king"></piece>`);
@@ -95,8 +106,23 @@ window.onload = function () {
             $(document).trigger('changeTurn');
         }
         else {
-            //replace move with piece
             let cell = ($(this).parent());
+
+            //make king if at edge of board
+            console.log(pieceTeam);
+            if(pieceTeam == 1){
+                console.log($(this).parent().attr('id').slice(0, 1));
+                if($(this).parent().attr('id').slice(0, 1) == 7){
+                    pieceKing = 1;
+                }
+            }
+            else {
+                if($(this).parent().attr('id').slice(0, 1) == 0){
+                    pieceKing = 1;
+                }
+            }
+
+            //replace move with piece
             if (pieceKing == 1) {
                 cell.empty().append(`<piece class="team${pieceTeam} king"></piece>`);
             }
@@ -192,7 +218,7 @@ window.onload = function () {
 
             //populates every other cell from starting point in current row
             for (let i = startPoint; i < 8; i += 2) {
-                currentRow.children().eq(i).append(`<piece class="team1 king"></piece>`);
+                currentRow.children().eq(i).append(`<piece class="team1"></piece>`);
 
             }
         }
@@ -211,7 +237,7 @@ window.onload = function () {
             }
 
             for (let i = startPoint; i < 8; i += 2) {
-                currentRow.children().eq(i).append(`<piece class="team2 king"></piece>`);
+                currentRow.children().eq(i).append(`<piece class="team2"></piece>`);
             }
         }
 
@@ -265,6 +291,7 @@ window.onload = function () {
     //the conditionals are checking for child elements
     //data will be hidden in the text of moves for the the move event listener to read
     //for readability i created a lot of variables here because dear god it's already bad enough
+    //probably could've bundled these two functions into one but i couldnt think of an elegant way to do so
 
     function team1Moves(x, y, piece) {
         //repeat clicks on a piece will not re-append because

@@ -198,7 +198,7 @@ window.onload = function () {
 
             //populates every other cell from starting point in current row
             for (let i = startPoint; i < 8; i += 2) {
-                currentRow.children().eq(i).append(`<piece class="team1"></piece>`);
+                currentRow.children().eq(i).append(`<piece class="team1 king"></piece>`);
 
             }
         }
@@ -217,7 +217,7 @@ window.onload = function () {
             }
 
             for (let i = startPoint; i < 8; i += 2) {
-                currentRow.children().eq(i).append(`<piece class="team2"></piece>`);
+                currentRow.children().eq(i).append(`<piece class="team2 king"></piece>`);
             }
         }
 
@@ -251,7 +251,7 @@ window.onload = function () {
 
     function determineFirstTurn() {
         //return either 1 or 2, which will determine who goes first
-        turn = 1 //Math.ceil(Math.random() * 2);
+        turn = Math.ceil(Math.random() * 2);
         if (turn === 1) {
             turnText.text('Team 1');
             turnText.css('color', 'rgb(130, 58, 58)');
@@ -329,8 +329,9 @@ window.onload = function () {
 
                 if(backLeftCell.children().eq(0).hasClass('team2') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7){
                     backLeftCell = board.children().eq(y - 2).children().eq(x - 2);
+                    console.log(backLeftCell);
 
-                    if(backLeftCell.children().length > 10){
+                    if(backLeftCell.children().length === 0){
                         backLeftCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
                     }
                 }
@@ -344,8 +345,10 @@ window.onload = function () {
             if(backRightCell.children().length > 0){
                 let backRightCellXVal = Number(backRightCell.attr('id').slice(1));
 
-                if(backLeftCell.children().eq(0).hasClass('team2') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
-                    backRightCell = board.children().eq(y - 2).children().eq(x - 2);
+                if(backRightCell.children().eq(0).hasClass('team2') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
+                    backRightCell = board.children().eq(y - 2).children().eq(x + 2);
+                    console.log('t1r')
+                    console.log(backRightCell);
 
                     if(backRightCell.children().length === 0){
                         backRightCell.append(`<div class="move hop">x${x}y${y}t1k${king}</div>`);
@@ -413,7 +416,7 @@ window.onload = function () {
                 if(backLeftCell.children().eq(0).hasClass('team1') && backLeftCellXVal !== 0 && backLeftCellXVal !== 7){
                     backLeftCell = board.children().eq(y + 2).children().eq(x - 2);
 
-                    if(backLeftCell.children().length > 10){
+                    if(backLeftCell.children().length === 0){
                         backLeftCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
                     }
                 }
@@ -427,8 +430,10 @@ window.onload = function () {
             if(backRightCell.children().length > 0){
                 let backRightCellXVal = Number(backRightCell.attr('id').slice(1));
 
-                if(backLeftCell.children().eq(0).hasClass('team1') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
-                    backRightCell = board.children().eq(y + 2).children().eq(x - 2);
+                if(backRightCell.children().eq(0).hasClass('team1') && backRightCellXVal !== 0 && backRightCellXVal !== 7){
+                    backRightCell = board.children().eq(y + 2).children().eq(x + 2);
+                    console.log('t')
+                    console.log(backRightCell);
 
                     if(backRightCell.children().length === 0){
                         backRightCell.append(`<div class="move hop">x${x}y${y}t2k${king}</div>`);
